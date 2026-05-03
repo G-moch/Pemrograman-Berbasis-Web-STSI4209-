@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard SITTA - 051472825</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body onload="setGreeting()">
+    <header class="navbar">
+        <div class="logo">SITTA UT</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="stok.html">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html">Tracking Pengiriman</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Laporan &#x25BC;</a>
+                    <div class="dropdown-content">
+                        <a href="#">Monitoring Progress DO Bahan Ajar</a>
+                        <a href="#">Rekap Bahan Ajar</a>
+                        <a href="#">Histori Transaksi Bahan Ajar</a>
+                    </div>
+                </li>
+                <li><a href="#" onclick="logout()" style="color: #ffcccc;">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="dashboard-content">
+        <h1>Dashboard Aplikasi SITTA</h1>
+        <h2 id="greetingText" style="color: #0056b3; font-weight: normal;"></h2>
+        
+        <div class="info-cards">
+            <div class="card-box" onclick="window.location.href='stok.html'">Lihat Stok Bahan Ajar</div>
+            <div class="card-box" onclick="window.location.href='tracking.html'">Cek Resi / DO</div>
+        </div>
+    </main>
+
+    <footer>&copy; 2026 Aplikasi SITTA Universitas Terbuka - 051472825</footer>
+    <script src="js/script.js"></script>
+</body>
+</html>

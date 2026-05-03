@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stok Bahan Ajar - 051472825</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body onload="loadStok()">
+    <header class="navbar">
+        <div class="logo">SITTA UT</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="stok.html" class="active">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html">Tracking Pengiriman</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="stok-content">
+        <h2>Informasi Bahan Ajar</h2>
+        <p>Peragaan Data Bahan Ajar</p>
+        
+        <button onclick="openModal('modalTambahStok')" class="btn-primary" style="margin-bottom: 20px;">+ Tambah Data Baru</button>
+
+        <div id="stokContainer" class="grid-container"></div>
+    </main>
+
+    <!-- Modal Tambah Stok -->
+    <div id="modalTambahStok" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeModal('modalTambahStok')">&times;</span>
+            <h3>Tambah Bahan Ajar Baru</h3>
+            <form id="formTambahStok" onsubmit="tambahStok(event)">
+                <input type="text" id="newKode" placeholder="Kode Barang" required>
+                <input type="text" id="newNama" placeholder="Nama Barang" required>
+                <input type="number" id="newStok" placeholder="Jumlah Stok" required>
+                <button type="submit" class="btn-primary">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>&copy; 2026 Aplikasi SITTA Universitas Terbuka - 051472825</footer>
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

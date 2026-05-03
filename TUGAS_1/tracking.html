@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking SITTA - 051472825</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">SITTA UT</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="stok.html">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html" class="active">Tracking Pengiriman</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="tracking-content">
+        <h2>Tracking Pengiriman Bahan Ajar</h2>
+        <div class="search-box">
+            <label for="inputDO">No. DO/Billing: </label>
+            <input type="text" id="inputDO" placeholder="Contoh: 2023005678">
+            <button onclick="cariTracking()" class="btn-primary">CARI</button>
+        </div>
+
+        <section id="trackingResult" class="result-container"></section>
+    </main>
+    
+    <footer>&copy; 2026 Aplikasi SITTA Universitas Terbuka - 051472825</footer>
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
