@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stok Bahan Ajar - Vue</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app-stok" class="app-container">
+        <div class="header-nav">
+            <h2>📦 Data Stok Bahan Ajar</h2>
+            <a href="index.html" class="back-btn">⬅ Kembali ke Menu</a>
+        </div>
+
+        <div class="filter-section">
+            <label><strong>Filter:</strong></label>
+            <select v-model="filter.upbjj">
+                <option value="">Semua UT-Daerah</option>
+                <option v-for="daerah in upbjjList" :value="daerah">{{ daerah }}</option>
+            </select>
+
+            <select v-model="filter.kategori" v-if="filter.upbjj !== ''">
+                <option value="">Semua Kategori</option>
+                <option v-for="kat in kategoriList" :value="kat">{{ kat }}</option>
+            </select>
+
+            <label>
+                <input type="checkbox" v-model="filter.reorderOnly"> Hanya Tampilkan Perlu Re-Order
+            </label>
+
+            <label style="margin-left: 20px;"><strong>Sort by:</strong></label>
+            <select v-model="sortKey">
+                <option value="judul">Judul (A-Z)</option>
+                <option value="qty">Stok Terkecil</option>
+                <option value="harga">Harga Termurah</option>
+            </select>
+
+            <button @click="resetFilter" class="btn-primary">Reset Filter</button>
+            <button @click="showAddForm = true" class="btn-primary" style="margin-left: auto;">+ Tambah Stok</button>
+        </div>
+
+        <div v-show="showAddForm" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ffeeba; font-size: 13px;">
+            <h3 style="margin-bottom: 15px; font-size: 16px;">Tambah Bahan Ajar Baru</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px;">
+                
+                <div style="margin-bottom: 5px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 4px;">Kode</label>
+                    <input type="text" v-model="newStok.kode" style="width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px;">
+                </div>
+                
+                <div style="margin-bottom: 5px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 4px;">Judul</label>
+                    <input type="text" v-model="newStok.judul" style="width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px;">
+                </div>
+                
+                <div style="margin-bottom: 5px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 4px;">Kategori</label>
+                    <select v-model="newStok.kategori" style="width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px;">
+                        <option v-for="kat in kategoriList" :value="kat">{{ kat }}</option>
+                    </select>
+                </div>
+                
+                <div style="margin-bottom: 5px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 4px;">UPBJJ</label>
+                    <select v-model="newStok.upbjj" style="width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px;">
+                        <option v-for="daerah in upbjjList" :value="daerah">{{ daerah }}</option>
+                    </select>
+                </div>
+                
+                <div style="margin-bottom: 5px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 4px;">Harga (Rp)</label>
+                    <input type="number" v-model.number="newStok.harga" style="width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px;">
+                </div>
+                
+                <div style="margin-bottom: 5px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 4px;">Lokasi Rak</label>
+                    <input type="text" v-model="newStok.lokasiRak" style="width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px;">
+                </div>
+                
+                <div style="margin-bottom: 5px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 4px;">Stok (Qty)</label>
+                    <input type="number" v-model.number="newStok.qty" style="width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px;">
+                </div>
+                
+                <div style="margin-bottom: 5px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 4px;">Safety Stok</label>
+                    <input type="number" v-model.number="newStok.safety" style="width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px;">
+                </div>
+            </div>
+            
+            <div style="margin-top: 15px;">
+                <button @click="tambahData" class="btn-primary" style="padding: 6px 15px; font-size: 13px;">Simpan Data</button>
+                <button @click="showAddForm = false" class="btn-danger" style="padding: 6px 15px; font-size: 13px;">Batal</button>
+            </div>
+        </div>
+
+    <div style="overflow-x: auto; width: 100%;">  
+        <table class="table-data">
+            <thead>
+                <tr>
+                    <th>Kode</th>
+                    <th>Judul Mata Kuliah</th>
+                    <th>Kategori</th>
+                    <th>UT-Daerah</th>
+                    <th>Harga</th>
+                    <th>Lokasi Rak</th>
+                    <th>Qty</th>
+                    <th>Safety</th>
+                    <th>Status</th>
+                    <th>Catatan</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in filteredAndSortedStok" :key="item.kode">
+                    <td><strong>{{ item.kode }}</strong></td>
+                    <td>{{ item.judul }}</td>
+                    
+                    <td>{{ item.kategori }}</td>
+                    <td>{{ item.upbjj }}</td>
+                    
+                    <td>Rp {{ item.harga.toLocaleString('id-ID') }}</td>
+                    
+                    <td>{{ item.lokasiRak }}</td>
+                    
+                    <td v-if="editIndex === index"><input type="number" v-model.number="editData.qty" style="width: 60px;"></td>
+                    <td v-else>{{ item.qty }}</td>
+
+                    <td v-if="editIndex === index"><input type="number" v-model.number="editData.safety" style="width: 60px;"></td>
+                    <td v-else>{{ item.safety }}</td>
+
+                    <td>
+                        <span v-if="item.qty === 0" class="status-kosong">Kosong</span>
+                        <span v-else-if="item.qty < item.safety" class="status-menipis">Menipis</span>
+                        <span v-else class="status-aman">Aman</span>
+                    </td>
+
+                    <td v-html="item.catatanHTML"></td>
+
+                    <td>
+                        <div v-if="editIndex === index" style="display: flex; gap: 5px; flex-direction: column;">
+                            <button @click="simpanEdit(index)" class="btn-primary">Save</button>
+                            <button @click="batalEdit()" class="btn-danger">Cancel</button>
+                        </div>
+                        <button v-else @click="mulaiEdit(index, item)" class="btn-warning">Edit</button>
+                    </td>
+                </tr>
+                <tr v-if="filteredAndSortedStok.length === 0">
+                    <td colspan="11" style="text-align: center;">Data tidak ditemukan.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+    </div>
+
+    <script src="js/dataBahanAjar.js"></script>
+    <script src="js/stok-app.js"></script>
+</body>
+</html>
